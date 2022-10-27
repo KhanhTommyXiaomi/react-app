@@ -1,24 +1,19 @@
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { getUsers } from './store.redux/userStore'
-import { AppDispatch } from './store.redux/store'
-import ListUsers from './components/ListUsers'
+import React, { Suspense } from 'react'
+import { Routes, Route } from 'react-router-dom'
+
+const NotFound = React.lazy(() => import('./not-found'))
+const ModuleMboGoalCycleSetting = React.lazy(() => import('./mbo-goal-cycle-setting'))
+const ModuleHome = React.lazy(() => import('./home'))
 
 const App = () => {
-  const { t: getLabel } = useTranslation()
-  const dispatch = useDispatch<AppDispatch>()
-  const getListUsers = () => {
-    dispatch(getUsers())
-  }
-  useEffect(() => {
-    getListUsers()
-  }, [])
   return (
-    <div className="app">
-      <h1>{getLabel('TXT_HELLO')}</h1>
-      <ListUsers />
-    </div>
+    <Suspense>
+      <Routes>
+        <Route path="/" element={<ModuleHome />} index />
+        <Route path="mbo-goal-cycle-setting/*" element={<ModuleMboGoalCycleSetting />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   )
 }
 
